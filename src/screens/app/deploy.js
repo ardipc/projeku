@@ -6,8 +6,9 @@ import {
   Button,
   Divider,
   FormControl,
-  InputLabel,
-  Select
+
+  TextField,
+  MenuItem
 } from '@material-ui/core';
 
 class Deploy extends React.Component {
@@ -48,22 +49,21 @@ class Deploy extends React.Component {
             <Typography>Deploy an app on branch</Typography>
             <Typography variant="caption">This will deploy the current state of the branch you specify below.</Typography>
 
-            <Typography variant="subtitle2" style={{marginTop: '12px', marginBottom: '8px'}}>Choose a branch to deploy</Typography>
+            <Typography variant="subtitle2" style={{marginTop: '12px', marginBottom: '12px'}}>Choose a branch to deploy</Typography>
             <FormControl variant="outlined" size="small" style={{width: '320px'}}>
-              <InputLabel htmlFor="outlined-age-native-simple">Branch</InputLabel>
-              <Select
-                native
+              <TextField
+                id="outlined-select-currency"
                 label="Branch"
-                inputProps={{
-                  name: 'age',
-                  id: 'outlined-age-native-simple',
-                }}
+                select
+                value={0}
+                variant="outlined"
+                size="small"
               >
-                <option aria-label="None" value="" />
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
-              </Select>
+                <MenuItem key={1} value={1}>master</MenuItem>
+                <MenuItem key={2} value={2}>staging</MenuItem>
+                <MenuItem key={3} value={3}>development</MenuItem>
+                <MenuItem key={4} value={4}>ardipc</MenuItem>
+              </TextField>
             </FormControl>
             <Button variant="contained" color="primary" style={{marginLeft: '16px'}}>Deploy</Button>
           </Grid>

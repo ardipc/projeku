@@ -1,17 +1,28 @@
 import React from 'react'
 import {
   Box,
-  Paper
+  Grid
 } from '@material-ui/core';
+
+import Activity from './activity'
+import Access from './access'
+import Resources from './resources'
 
 class Overview extends React.Component {
 
   render() {
     return (
-      <Box style={{margin: '16px 0'}}>
-        <Paper style={{padding: '12px'}}>
-          Overview
-        </Paper>
+      <Box>
+        <Grid container style={{flexGrow: 1}}>
+          <Grid item sm={6}>
+            <Resources />
+            <Access />
+          </Grid>
+
+          <Grid item sm={6}>
+            <Activity />
+          </Grid>
+        </Grid>
       </Box>
     )
   }

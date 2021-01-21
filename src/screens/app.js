@@ -3,8 +3,6 @@ import {
   Switch,
   Route,
   NavLink,
-  Link,
-  LinkProps
 } from "react-router-dom";
 
 import {
@@ -14,9 +12,6 @@ import {
   Paper,
 
   Toolbar,
-  AppBar,
-  Typography,
-  Grid
 } from '@material-ui/core';
 
 import Overview from './app/overview';
@@ -28,7 +23,7 @@ import Access from './app/access';
 import Settings from './app/settings';
 
 import Tabs from '@material-ui/core/Tabs';
-import { default as Tab, TabProps } from '@material-ui/core/Tab';
+import { default as Tab } from '@material-ui/core/Tab';
 
 class AppScreen extends React.Component {
 
@@ -51,7 +46,8 @@ class AppScreen extends React.Component {
           <Container>
             <Toolbar style={{padding: '0'}}>
               <h2 edge="start" style={{flexGrow: 1}}>{this.state.appName}</h2>
-              <Button variant="outlined" color="primary">Buka aplikasi</Button>
+              <Button variant="outlined" color="primary" style={{marginLeft: '12px'}}>Open app</Button>
+              <Button variant="outlined" color="primary" style={{marginLeft: '12px'}}>View logs</Button>
             </Toolbar>
           </Container>
         </Paper>

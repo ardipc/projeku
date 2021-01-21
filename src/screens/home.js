@@ -17,7 +17,6 @@ import {
   Typography
 } from '@material-ui/core';
 
-import FlashOffIcon from '@material-ui/icons/FlashOff';
 import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 import { Skeleton } from '@material-ui/lab';
