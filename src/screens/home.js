@@ -21,30 +21,26 @@ import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 import { Skeleton } from '@material-ui/lab';
 
-import axios from 'axios';
-import { XMYSQL_URL } from '../env';
+import { API, USER } from '../configs/api';
+import { API_URL } from '../env';
 
 class HomeScreen extends React.Component {
 
   state = {
-    user: {},
-    listApp: []
+    user: USER,
+    apps: []
   }
 
   componentDidMount() {
-    if(localStorage.getItem('user')) {
-      this.setState({ user: JSON.parse(localStorage.getItem('user')) })
-    }
 
-    this.fetchApps()
   }
 
   fetchApps() {
-    if(localStorage.getItem('user')) {
-      axios.get(`${XMYSQL_URL}/apps?_where=(user_id,eq,${JSON.parse(localStorage.getItem('user')).id})`).then(res => {
-        this.setState({ listApp: res.data })
-      })
-    }
+    API.get(`${API_URL}/api/apps/get`).then(res => {
+      if(res.status === 200 && res.data.error === false) {
+        this.setState({ apps: res.data.result })
+      }
+    })
   }
 
   render() {
@@ -70,18 +66,18 @@ class HomeScreen extends React.Component {
         </Paper>
 
         <Container style={{marginTop: '16px'}}>
-          <TextField label="Cari aplikasi" variant="outlined" style={{width: '400px', marginBottom: '16px'}} size="small" />
+
+          {
+            this.state.apps.length !== 0 &&
+            <TextField label="Cari aplikasi" variant="outlined" style={{width: '400px', marginBottom: '16px'}} size="small" />
+          }
 
           <Grid container>
             <Grid item sm={12}>
               <List>
 
                 {
-                  this.state.listApp.length === 0 && <Typography>Oops.</Typography>
-                }
-
-                {
-                  this.state.listApp.map((item, i) => (
+                  this.state.apps.map((item, i) => (
                     <Link key={`${item}-${i}`} to={`/app/${item.name}`} style={{textDecoration: 'none'}}>
                       <Paper style={{marginBottom: '16px'}} elevation={3}>
                         <ListItem>
