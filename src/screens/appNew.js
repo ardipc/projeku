@@ -1,10 +1,6 @@
 import React from 'react'
 import {
-  Switch,
-  Route,
-  NavLink,
-  Link,
-  LinkProps
+  Link
 } from "react-router-dom";
 
 import {
@@ -13,36 +9,73 @@ import {
   Container,
   Paper,
 
-  Toolbar,
-  AppBar,
   Typography,
-  Grid,
   TextField,
-  MenuItem
+  MenuItem,
+
+  CircularProgress
 } from '@material-ui/core';
 
-import Overview from './app/overview';
-import Resources from './app/resources';
-import Deploy from './app/deploy';
-import Metrics from './app/metrics';
-import Activity from './app/activity';
-import Access from './app/access';
-import Settings from './app/settings';
-
-import Tabs from '@material-ui/core/Tabs';
-import { default as Tab, TabProps } from '@material-ui/core/Tab';
+import { API_URL, XMYSQL_URL } from '../env';
+import axios from 'axios';
 
 class AppNewScreen extends React.Component {
 
   state = {
+    user: {},
+
     tab: 0,
     pathName: '',
-    appName: ''
+    appName: '',
+
+    app: '',
+    helperApp: 'define your app to deploy',
+
+    buildPack: '',
+
+    loading: false
   }
 
   componentDidMount() {
+    if(localStorage.getItem('user')) {
+      this.setState({ user: JSON.parse(localStorage.getItem('user')) })
+    }
+
     let split = this.props.location.pathname.split('/');
     this.setState({ pathName: split[1], appName: split[2] })
+  }
+
+  createApp = e => {
+    this.setState({ loading: true })
+
+    let create = {
+      user_id: this.state.user.id,
+      name: this.state.app,
+      build: this.state.buildPack
+    };
+    axios.post(`${XMYSQL_URL}/apps`, create).then(res => {
+
+      let data = {
+        name: this.state.app,
+        build: this.state.buildPack,
+        port: (10000+res.data.insertId)
+      }
+      axios.post(`${API_URL}/create`, data).then(res => {
+        if(res.status === 200) {
+          this.setState({ loading: false })
+          window.location.href = '/'
+        }
+      })
+
+    })
+  }
+
+  checkName = e => {
+    axios.get(`${XMYSQL_URL}/apps?_where=(name,eq,${this.state.app})`).then(res => {
+      if(res.data.length === 1) {
+        this.setState({ app: '', helperApp: 'name already taken' })
+      }
+    })
   }
 
   render() {
@@ -61,8 +94,11 @@ class AppNewScreen extends React.Component {
               <TextField
                 id="outlined-helperText"
                 label="App name"
-                defaultValue="your-app"
-                helperText="define your app to deploy"
+                onChange={e => this.setState({ app: e.target.value })}
+                onBlur={this.checkName}
+                value={this.state.app}
+                defaultValue={this.state.app}
+                helperText={this.state.helperApp}
                 variant="outlined"
                 style={{width: '400px'}} size="small"
               />
@@ -71,41 +107,30 @@ class AppNewScreen extends React.Component {
             <div style={{marginBottom: '32px'}}>
               <TextField
                 id="outlined-select-currency"
-                label="Region"
-                select
-                value={1}
-                helperText="choose your location app"
-                variant="outlined"
-                size="small"
-                style={{width: '400px', textAlign: 'left'}}
-              >
-                <MenuItem key={1} value={1}>Jawa Barat</MenuItem>
-                <MenuItem key={3} value={3}>Jawa Tengah</MenuItem>
-                <MenuItem key={2} value={2}>Jawa Timur</MenuItem>
-                <MenuItem key={4} value={4}>Banten</MenuItem>
-              </TextField>
-            </div>
-
-            <div style={{marginBottom: '32px'}}>
-              <TextField
-                id="outlined-select-currency"
                 label="Buildpack"
                 select
                 helperText="choose buildpack to deploy with your app"
-                value={1}
+                onChange={e => this.setState({ buildPack: e.target.value })}
+                value={this.state.buildPack}
+                defaultValue={this.state.buildPack}
                 variant="outlined"
                 size="small"
                 style={{width: '400px', textAlign: 'left'}}
               >
-                <MenuItem key={1} value={1}>Node.js</MenuItem>
-                <MenuItem key={3} value={3}>Golang</MenuItem>
-                <MenuItem key={2} value={2}>Python</MenuItem>
-                <MenuItem key={4} value={4}>Laravel</MenuItem>
+                <MenuItem key={0} value={`html`}>HTML</MenuItem>
+                <MenuItem key={1} value={`node`}>Node.js</MenuItem>
+                <MenuItem key={3} value={`golang`}>Golang</MenuItem>
+                <MenuItem key={2} value={`python`}>Python</MenuItem>
+                <MenuItem key={4} value={'laravel'}>Laravel</MenuItem>
               </TextField>
             </div>
 
             <div>
-              <Button variant="contained" color="primary" style={{margin: '0px 12px'}}>Create app</Button>
+              <Button disabled={this.state.app === ''} onClick={this.createApp} variant="contained" color="primary" style={{margin: '0px 12px'}}>
+                {
+                  this.state.loading ? <CircularProgress style={{color: 'white'}} size={20} /> : 'Create app'
+                }
+              </Button>
               <Button color="default" component={Link} to="/">Cancel</Button>
             </div>
 

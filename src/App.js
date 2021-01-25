@@ -72,7 +72,32 @@ const Footer = () => (
 
 class App extends React.Component {
   state = {
+    user: {},
     open: false
+  }
+
+  setToDevelopment = e => {
+    let user = {
+      "id": 1,
+      "email": "ardiansyah3ber@gmail.com",
+      "pass": "f9dea888a7e90ca02a4c52e6654bf3f2",
+      "name": "Ahmad Ardiansyah",
+      "phone": "082334093822",
+      "avatar": null,
+      "created": "2021-01-22T07:02:17.000Z"
+    };
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+
+  removeDevelopment = e => {
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  componentDidMount() {
+    if(localStorage.getItem('user')) {
+      this.setState({ user: JSON.parse(localStorage.getItem('user')) })
+    }
   }
 
   render() {
@@ -106,6 +131,7 @@ class App extends React.Component {
                 aria-label="account of current user"
                 aria-haspopup="true"
                 color="inherit"
+                onClick={this.setToDevelopment}
               >
                 <AccountCircle />
               </IconButton>
@@ -147,7 +173,7 @@ class App extends React.Component {
               <Button onClick={() => this.setState({ open: false })} color="primary">
                 Nope
               </Button>
-              <Button variant="outlined" onClick={() => this.setState({ open: false })} color="primary" autoFocus>
+              <Button variant="outlined" onClick={this.removeDevelopment} color="primary" autoFocus>
                 Yes, now
               </Button>
             </DialogActions>
