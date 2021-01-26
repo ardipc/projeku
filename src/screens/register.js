@@ -98,7 +98,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h4" style={{marginBottom: '24px'}}>PROJEKU</Typography>
 
         <Typography component="h1" variant="h5">
-          {message === '' ? 'Sign up' : <Alert severity="success">message</Alert>}
+          {message === '' ? 'Sign up' : <Alert severity="success">{message}</Alert>}
         </Typography>
         <form className={classes.form} onSubmit={SignUp}>
           <Grid container spacing={2}>

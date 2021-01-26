@@ -7,6 +7,7 @@ import {
 
 import NotFound from '../ui/notFound';
 
+import Forgot from '../screens/forgot';
 import Login from '../screens/login';
 import Register from '../screens/register';
 
@@ -21,6 +22,7 @@ class Public extends React.Component {
       <Router>
 
         <Switch>
+          <Route path="/forgot" component={Forgot} />
           <Route path="/register" component={Register} />
           <Route path="/" exact component={props => <Login {...props} changeToPrivate={this.props.changeToPrivate} />} />
 

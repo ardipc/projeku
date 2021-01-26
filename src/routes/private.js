@@ -29,6 +29,7 @@ import {
 import HomeScreen from '../screens/home';
 import AppScreen from '../screens/app';
 import AppNewScreen from '../screens/appNew';
+import AccountScreen from '../screens/account';
 
 import NotFound from '../ui/notFound';
 import Footer from '../ui/footer';
@@ -73,7 +74,8 @@ class Private extends React.Component {
               aria-label="account of current user"
               aria-haspopup="true"
               color="inherit"
-              onClick={this.setToDevelopment}
+              component={Link}
+              to={`/account`}
             >
               <AccountCircle />
             </IconButton>
@@ -91,6 +93,7 @@ class Private extends React.Component {
         </AppBar>
 
         <Switch>
+          <Route path="/account" component={AccountScreen} />
           <Route path="/app-new" component={AppNewScreen} />
           <Route path="/app" component={AppScreen} />
           <Route path="/" exact component={HomeScreen} />

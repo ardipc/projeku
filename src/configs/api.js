@@ -5,9 +5,3 @@ export const USER  = localStorage.getItem('users') ? JSON.parse(localStorage.get
 
 axios.defaults.headers.common = {'Authorization': `bearer ${USER.token}`};
 export const API   = axios;
-
-if(localStorage.getItem('users')) {
-  console.log('ada')
-} else {
-  console.log('tidak')
-}

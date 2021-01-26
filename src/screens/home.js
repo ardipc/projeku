@@ -17,7 +17,7 @@ import {
   Typography
 } from '@material-ui/core';
 
-import LiveTvIcon from '@material-ui/icons/LiveTv';
+import AdbIcon from '@material-ui/icons/Adb';
 
 import { Skeleton } from '@material-ui/lab';
 
@@ -28,7 +28,19 @@ class HomeScreen extends React.Component {
 
   state = {
     user: {},
-    apps: []
+    apps: [],
+
+    search: ''
+  }
+
+  searchApps = e => {
+    this.setState({ search: e.target.value })
+  }
+
+  onBackSpace = e => {
+    if (e.keyCode === 13) {
+      this.fetchApps(this.state.search)
+    }
   }
 
   componentDidMount() {
@@ -36,12 +48,21 @@ class HomeScreen extends React.Component {
     this.fetchApps()
   }
 
-  fetchApps() {
-    API.get(`${API_URL}/api/apps`).then(res => {
-      if(res.status === 200 && res.data.error === false) {
-        this.setState({ apps: res.data.result })
-      }
-    })
+  fetchApps(q = '') {
+    if(q) {
+      API.get(`${API_URL}/api/apps/search?q=${q}`).then(res => {
+        if(res.status === 200 && res.data.error === false) {
+          this.setState({ apps: res.data.result })
+        }
+      })
+    }
+    else {
+      API.get(`${API_URL}/api/apps`).then(res => {
+        if(res.status === 200 && res.data.error === false) {
+          this.setState({ apps: res.data.result })
+        }
+      })
+    }
   }
 
   render() {
@@ -59,7 +80,7 @@ class HomeScreen extends React.Component {
                 this.state.user.hasOwnProperty('name') &&
                 <>
                   <h2 edge="start" style={{flexGrow: 1}}>{this.state.user.name}</h2>
-                  <Button component={Link} to={`/app-new`} variant="outlined" color="primary">Buat aplikasi</Button>
+                  <Button component={Link} to={`/app-new`} variant="outlined" color="primary">Create app</Button>
                 </>
               }
 
@@ -69,10 +90,14 @@ class HomeScreen extends React.Component {
 
         <Container style={{marginTop: '16px'}}>
 
-          {
-            this.state.apps.length !== 0 &&
-            <TextField label="Cari aplikasi" variant="outlined" style={{width: '400px', marginBottom: '16px'}} size="small" />
-          }
+          <TextField
+            onChange={this.searchApps}
+            onKeyDown={this.onBackSpace}
+            value={this.state.search}
+            label="Search app"
+            variant="outlined"
+            style={{width: '400px', marginBottom: '16px'}}
+            size="small" />
 
           <Grid container>
             <Grid item sm={12}>
@@ -84,12 +109,12 @@ class HomeScreen extends React.Component {
                       <Paper style={{marginBottom: '16px'}} elevation={3}>
                         <ListItem>
                           <ListItemIcon>
-                            <LiveTvIcon />
+                            <AdbIcon />
                           </ListItemIcon>
                           <ListItemText primary={item.name} />
                           <ListItemSecondaryAction>
-                            <Typography variant="caption" style={{marginLeft: '12px'}}>Nodejs</Typography>
-                            <Typography variant="caption" style={{marginLeft: '12px'}}>Running</Typography>
+                            <Typography variant="caption" style={{marginLeft: '12px'}}><b>{item.buildpack}</b></Typography>
+                            <Typography variant="caption" style={{marginLeft: '12px', color: 'green'}}>Running</Typography>
                           </ListItemSecondaryAction>
                         </ListItem>
                       </Paper>

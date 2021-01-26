@@ -11,7 +11,7 @@ import {
   Container,
   Paper,
 
-  Toolbar,
+  Toolbar
 } from '@material-ui/core';
 
 import Overview from './app/overview';
