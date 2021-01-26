@@ -7,8 +7,12 @@ import axios from 'axios';
 import { API_URL } from '../env';
 
 import {
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core';
+
+import {
+  Alert
+} from '@material-ui/lab'
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -93,9 +97,11 @@ export default function SignInSide(props) {
       if(res.status === 200 && res.data.error === false) {
         setLoading(false)
         props.changeToPrivate(true);
+        setMessage('Redirecting...')
         localStorage.setItem('users', JSON.stringify(res.data.result))
       }
       else {
+        setLoading(false)
         setMessage(res.data.result)
       }
     })
@@ -112,7 +118,7 @@ export default function SignInSide(props) {
           <div className={classes.paper}>
             <Typography component="h1" variant="h4" style={{marginBottom: '24px'}}>PROJEKU</Typography>
             <Typography component="h1" variant="h5">
-              {message === '' ? 'Sign in' : message}
+              {message === '' ? 'Sign in' : <Alert severity="info">{message}</Alert>}
             </Typography>
             <form className={classes.form} onSubmit={SignIn}>
               <TextField onChange={e => setEmail(e.target.value)} value={email} variant="outlined" margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus />

@@ -2,4 +2,12 @@ import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const USER  = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : {};
-export const API   = axios.defaults.headers.common = {'Authorization': `bearer ${USER.token}`};
+
+axios.defaults.headers.common = {'Authorization': `bearer ${USER.token}`};
+export const API   = axios;
+
+if(localStorage.getItem('users')) {
+  console.log('ada')
+} else {
+  console.log('tidak')
+}

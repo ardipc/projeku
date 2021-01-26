@@ -7,8 +7,7 @@ import Private from './routes/private'
 class App extends React.Component {
 
   state = {
-    isLogin: localStorage.getItem('isLogin'),
-    user: {},
+    isLogin: localStorage.getItem('isLogin') && localStorage.getItem('users'),
     open: false
   }
 
@@ -18,8 +17,7 @@ class App extends React.Component {
     } else {
       localStorage.clear();
     }
-
-    this.setState({ isLogin: value })
+    window.location.reload()
   }
 
   render() {

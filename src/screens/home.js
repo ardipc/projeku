@@ -27,16 +27,17 @@ import { API_URL } from '../env';
 class HomeScreen extends React.Component {
 
   state = {
-    user: USER,
+    user: {},
     apps: []
   }
 
   componentDidMount() {
-
+    this.setState({ user: USER })
+    this.fetchApps()
   }
 
   fetchApps() {
-    API.get(`${API_URL}/api/apps/get`).then(res => {
+    API.get(`${API_URL}/api/apps`).then(res => {
       if(res.status === 200 && res.data.error === false) {
         this.setState({ apps: res.data.result })
       }
@@ -44,6 +45,7 @@ class HomeScreen extends React.Component {
   }
 
   render() {
+
     return (
       <Box style={{marginBottom: '70px', marginTop: '64px'}}>
         <Paper variant="outlined" square style={{backgroundColor: '#f7f8fb'}}>

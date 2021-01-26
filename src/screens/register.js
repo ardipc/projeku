@@ -10,6 +10,10 @@ import {
   CircularProgress
 } from '@material-ui/core';
 
+import {
+Alert
+} from '@material-ui/lab'
+
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -94,7 +98,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h4" style={{marginBottom: '24px'}}>PROJEKU</Typography>
 
         <Typography component="h1" variant="h5">
-          {message === '' ? 'Sign up' : message}
+          {message === '' ? 'Sign up' : <Alert severity="success">message</Alert>}
         </Typography>
         <form className={classes.form} onSubmit={SignUp}>
           <Grid container spacing={2}>

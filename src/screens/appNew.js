@@ -16,20 +16,22 @@ import {
   CircularProgress
 } from '@material-ui/core';
 
-import { API_URL, XMYSQL_URL } from '../env';
-import axios from 'axios';
+import { API, USER } from '../configs/api';
+import { API_URL } from '../env';
 
 class AppNewScreen extends React.Component {
 
   state = {
-    user: {},
+    user: USER,
+
+    buildpacks: [],
 
     tab: 0,
     pathName: '',
     appName: '',
 
     app: '',
-    helperApp: 'define your app to deploy',
+    helperApp: '',
 
     buildPack: '',
 
@@ -37,12 +39,18 @@ class AppNewScreen extends React.Component {
   }
 
   componentDidMount() {
-    if(localStorage.getItem('user')) {
-      this.setState({ user: JSON.parse(localStorage.getItem('user')) })
-    }
-
     let split = this.props.location.pathname.split('/');
     this.setState({ pathName: split[1], appName: split[2] })
+
+    this.fetchBuildPack()
+  }
+
+  fetchBuildPack() {
+    API.get(`${API_URL}/api/buildpacks`).then(res => {
+      if(res.status === 200 && res.data.error === false) {
+        this.setState({ buildpacks: res.data.result })
+      }
+    })
   }
 
   createApp = e => {
@@ -53,27 +61,22 @@ class AppNewScreen extends React.Component {
       name: this.state.app,
       build: this.state.buildPack
     };
-    axios.post(`${XMYSQL_URL}/apps`, create).then(res => {
+    API.post(`${API_URL}/api/apps`, create).then(res => {
 
-      let data = {
-        name: this.state.app,
-        build: this.state.buildPack,
-        port: (10000+res.data.insertId)
-      }
-      axios.post(`${API_URL}/create`, data).then(res => {
-        if(res.status === 200) {
-          this.setState({ loading: false })
-          window.location.href = '/'
-        }
-      })
+      this.setState({ loading: false })
+      this.props.history.push('/')
 
     })
   }
 
   checkName = e => {
-    axios.get(`${XMYSQL_URL}/apps?_where=(name,eq,${this.state.app})`).then(res => {
-      if(res.data.length === 1) {
-        this.setState({ app: '', helperApp: 'name already taken' })
+    this.setState({ helperApp: 'rechecking...'})
+    API.get(`${API_URL}/api/apps/check?name=${this.state.app}`).then(res => {
+      if(res.data.error) {
+        this.setState({ app: '', helperApp: 'name already taken.' })
+      }
+      else {
+        this.setState({ helperApp: 'app ready.'})
       }
     })
   }
@@ -92,13 +95,15 @@ class AppNewScreen extends React.Component {
 
             <div style={{marginBottom: '32px'}}>
               <TextField
+                autoFocus={this.state.app === '' && this.state.helperApp}
+                color={this.state.app === '' && this.state.helperApp ? 'secondary' : 'default'}
                 id="outlined-helperText"
                 label="App name"
                 onChange={e => this.setState({ app: e.target.value })}
                 onBlur={this.checkName}
                 value={this.state.app}
                 defaultValue={this.state.app}
-                helperText={this.state.helperApp}
+                helperText={this.state.helperApp ? this.state.helperApp : 'define your app to deploy.'}
                 variant="outlined"
                 style={{width: '400px'}} size="small"
               />
@@ -117,11 +122,12 @@ class AppNewScreen extends React.Component {
                 size="small"
                 style={{width: '400px', textAlign: 'left'}}
               >
-                <MenuItem key={0} value={`html`}>HTML</MenuItem>
-                <MenuItem key={1} value={`node`}>Node.js</MenuItem>
-                <MenuItem key={3} value={`golang`}>Golang</MenuItem>
-                <MenuItem key={2} value={`python`}>Python</MenuItem>
-                <MenuItem key={4} value={'laravel'}>Laravel</MenuItem>
+                {
+                  this.state.buildpacks.map((item,i) => (
+
+                    <MenuItem key={`${item.id}-${i}`} value={item.id}>{item.name}</MenuItem>
+                  ))
+                }
               </TextField>
             </div>
 

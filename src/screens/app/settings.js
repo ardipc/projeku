@@ -17,8 +17,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import axios from 'axios'
-import { API_URL } from '../../env'
+import { API, USER } from '../../configs/api';
+import { API_URL } from '../../env';
 
 class Settings extends React.Component {
 
@@ -35,16 +35,12 @@ class Settings extends React.Component {
     this.setState({ appName: e.target.value })
   }
 
-  saveAppName = e => {
-    console.log(e.target.value)
-  }
-
   deleteApp = e => {
     this.setState({ loading: true })
-    axios.delete(`${API_URL}/delete/${this.state.deleteApp}`).then(res => {
+    API.delete(`${API_URL}/api/apps/${this.state.deleteApp}`).then(res => {
       if(res.status === 200) {
         this.setState({ loading: false, deleteApp: '', isDelete: false })
-        window.location.href = '/'
+        this.props.history.push('/')
       }
     })
   }

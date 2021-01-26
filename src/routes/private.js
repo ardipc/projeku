@@ -23,8 +23,6 @@ import {
 
   Dialog,
   DialogTitle,
-  DialogContent,
-  DialogContentText,
   DialogActions
 } from '@material-ui/core'
 
@@ -109,17 +107,12 @@ class Private extends React.Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">{"Are you sure want to sign out ?"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
+
           <DialogActions>
             <Button onClick={() => this.setState({ open: false })} color="primary">
               Nope
             </Button>
-            <Button variant="outlined" onClick={this.signOut} color="primary" autoFocus>
+            <Button variant="contained" onClick={this.signOut} color="primary" autoFocus>
               Yes, now
             </Button>
           </DialogActions>

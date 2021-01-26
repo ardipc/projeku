@@ -46,7 +46,7 @@ class AppScreen extends React.Component {
           <Container>
             <Toolbar style={{padding: '0'}}>
               <h2 edge="start" style={{flexGrow: 1}}>{this.state.appName}</h2>
-              <Button variant="outlined" color="primary" style={{marginLeft: '12px'}}>Open app</Button>
+              <Button target="_blank" href={`https://${this.state.appName}.projekku.carsworld.co.id`} variant="outlined" color="primary" style={{marginLeft: '12px'}}>Open app</Button>
               <Button variant="outlined" color="primary" style={{marginLeft: '12px'}}>View logs</Button>
             </Toolbar>
           </Container>
