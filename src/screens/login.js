@@ -107,6 +107,18 @@ export default function SignInSide(props) {
     })
   }
 
+  const SendLinkUpdate = e => {
+    e.preventDefault()
+    setLoading(true)
+    axios.post(`${API_URL}/api/users/forgot`, {email: email}).then(res => {
+      if(res.status === 200 && res.data.error === false) {
+        setMessage('Please check your inbox.')
+        setLoading(true)
+        setEmail('')
+      }
+    })
+  }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -152,10 +164,12 @@ export default function SignInSide(props) {
           <div className={classes.paper}>
             <Typography component="h1" variant="h4" style={{marginBottom: '24px'}}>PROJEKU</Typography>
             <Typography component="h1" variant="h5">
-              Forgot password
+            {message === '' ? 'Forgot password' : <Alert severity="info">{message}</Alert>}
             </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} onSubmit={SendLinkUpdate}>
               <TextField
+                onChange={e => setEmail(e.target.value)}
+                value={email}
                 variant="outlined"
                 margin="normal"
                 required
@@ -172,9 +186,12 @@ export default function SignInSide(props) {
                 fullWidth
                 variant="contained"
                 color="primary"
+                onClick={SendLinkUpdate}
                 className={classes.submit}
               >
-                Send
+                {
+                  loading ? <CircularProgress style={{color: 'white'}} size={20} /> : 'Send'
+                }
               </Button>
               <Grid container>
                 <Grid item xs>
