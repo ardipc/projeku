@@ -84,11 +84,13 @@ export default function SignInSide(props) {
   const UpdatePassword = e => {
     e.preventDefault()
     let form = {
-      enc: enc,
+      email: enc,
       pass: pass
     };
+    setLoading(true)
     axios.post(`${API_URL}/api/users/password`, form).then(res => {
       if(res.status === 200 && res.data.error === false) {
+        setLoading(false)
         setMessage('Password successfully updated.')
       }
     })
