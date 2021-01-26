@@ -113,7 +113,7 @@ export default function SignInSide(props) {
     axios.post(`${API_URL}/api/users/forgot`, {email: email}).then(res => {
       if(res.status === 200 && res.data.error === false) {
         setMessage('Please check your inbox.')
-        setLoading(true)
+        setLoading(false)
         setEmail('')
       }
     })
