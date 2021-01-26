@@ -17,7 +17,7 @@ class App extends React.Component {
     } else {
       localStorage.clear();
     }
-    window.location.reload()
+    window.location.href = '/'
   }
 
   render() {
