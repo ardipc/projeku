@@ -17,7 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { API, USER } from '../../configs/api';
+import { API } from '../../configs/api';
 import { API_URL } from '../../env';
 
 class Settings extends React.Component {

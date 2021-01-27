@@ -5,10 +5,8 @@ import {
   Typography,
   Button,
   Divider,
-  FormControl,
 
   TextField,
-  MenuItem,
   Avatar
 } from '@material-ui/core';
 

@@ -74,7 +74,6 @@ export default function SignInSide(props) {
   const query = new URLSearchParams(props.location.search);
 
   const [enc, setEnc] = React.useState(query.get('q'));
-  const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [message, setMessage] = React.useState('');
 

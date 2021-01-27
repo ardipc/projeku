@@ -8,12 +8,55 @@ import {
   FormControl,
 
   TextField,
-  MenuItem
+  MenuItem,
+
+  Dialog,
+
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+
+  Paper
 } from '@material-ui/core';
+
+import GitHubIcon from '@material-ui/icons/GitHub';
+
+import StepDeploy from '../../ui/stepper'
+
+import { API, USER } from '../../configs/api';
+import { API_URL } from '../../env';
 
 class Deploy extends React.Component {
 
+  state = {
+    isDeploy: false,
+    repo: []
+  }
+
+  setDialog = (value) => {
+    this.fetchRepo()
+    this.setState({ isDeploy: value })
+  }
+
+  componentDidMount() {
+    this.fetchRepo()
+  }
+
+  fetchRepo() {
+    API.get(`${API_URL}/api/repos/${this.props.match.params.appName}`).then(res => {
+      if(res.status === 200 && res.data.error === false) {
+        this.setState({ repo: res.data.result })
+      }
+    })
+  }
+
   render() {
+
+    console.log('state: ', this.state);
+
     return (
       <Box style={{margin: '16px 0'}}>
         <Grid container style={{margin: '16px 0'}}>
@@ -21,12 +64,57 @@ class Deploy extends React.Component {
             <Typography>Deployment method</Typography>
           </Grid>
           <Grid item sm={8}>
-            <Button variant="contained" style={{marginRight: '16px'}}>Github</Button>
-            <Button variant="contained" style={{marginRight: '16px'}}>Bitbucket</Button>
-            <Button variant="contained" style={{marginRight: '16px'}}>Gitlab</Button>
+            {
+              this.state.repo.length === 0 &&
+              <Button
+                color="primary"
+                onClick={e => this.setState({ isDeploy: true })}
+                variant="contained"
+                style={{marginRight: '16px'}}
+                startIcon={<GitHubIcon />}
+                >
+                Repository
+              </Button>
+            }
+
+            {
+              this.state.repo.length === 1 &&
+              <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Repository</TableCell>
+                      <TableCell align="right"><Button variant="outlined" color="secondary" size="small">Disconnect</Button></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>{this.state.repo[0].url}</TableCell>
+                      <TableCell align="right">{this.state.repo[0].user}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            }
+
           </Grid>
+
+          <Dialog
+            fullWidth={true}
+            maxWidth="sm"
+            open={this.state.isDeploy}
+            onClose={() => this.setState({ isDeploy: false })}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+
+            <StepDeploy appName={this.props.match.params.appName} setDialog={this.setDialog} />
+
+          </Dialog>
         </Grid>
+
         <Divider />
+
         <Grid container style={{margin: '16px 0'}}>
           <Grid item sm={4}>
             <Typography>Automatic deploy</Typography>
