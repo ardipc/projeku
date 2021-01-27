@@ -22,6 +22,7 @@ import {
   Paper
 } from '@material-ui/core';
 
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
 import StepDeploy from '../../ui/stepper'
@@ -39,6 +40,14 @@ class Deploy extends React.Component {
   setDialog = (value) => {
     this.fetchRepo()
     this.setState({ isDeploy: value })
+  }
+
+  disconnectRepo = () => {
+    API.delete(`${API_URL}/api/repos/${this.props.match.params.appName}`).then(res => {
+      if(res.status === 200 && res.data.error === false) {
+        this.fetchRepo()
+      }
+    })
   }
 
   componentDidMount() {
@@ -84,12 +93,16 @@ class Deploy extends React.Component {
                   <TableHead>
                     <TableRow>
                       <TableCell>Repository</TableCell>
-                      <TableCell align="right"><Button variant="outlined" color="secondary" size="small">Disconnect</Button></TableCell>
+                      <TableCell align="right"><Button onClick={this.disconnectRepo} variant="outlined" color="secondary" size="small">Disconnect</Button></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell>{this.state.repo[0].url}</TableCell>
+                      <TableCell>
+                        <Typography>
+                          <CheckCircleIcon style={{color: 'green', marginBottom: '-6px'}} /> {this.state.repo[0].url}
+                        </Typography>
+                      </TableCell>
                       <TableCell align="right">{this.state.repo[0].user}</TableCell>
                     </TableRow>
                   </TableBody>
