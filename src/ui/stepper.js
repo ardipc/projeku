@@ -9,6 +9,10 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
+import {
+  CircularProgress
+} from '@material-ui/core'
+
 import { API, USER } from '../configs/api';
 import { API_URL } from '../env';
 
@@ -41,6 +45,7 @@ export default function HorizontalLinearStepper(props) {
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
 
+  const [loading, setLoading] = React.useState(false);
   const [url, setUrl] = React.useState('');
   const [user, setUser] = React.useState('');
   const [pass, setPass] = React.useState('');
@@ -57,9 +62,11 @@ export default function HorizontalLinearStepper(props) {
       pass
     }
 
+    setLoading(true);
     API.post(`${API_URL}/api/repos`, form).then(res => {
       if(res.status === 200 && res.data.error === false) {
-        props.setDialog(false)
+        setLoading(false);
+        props.setDialog(false);
       }
     })
 
@@ -171,7 +178,7 @@ export default function HorizontalLinearStepper(props) {
                 onClick={activeStep === 2 ? handleRepo: handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ? (loading ? <CircularProgress style={{color: 'white'}} size={20} /> : 'Finish') : 'Next'}
               </Button>
             </div>
           </div>

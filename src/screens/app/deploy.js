@@ -136,8 +136,8 @@ class Deploy extends React.Component {
           <Grid item sm={8}>
             <Typography variant="caption">Every push to master will deploy a new version of this app. Deploys happen automatically: be sure that this branch in GitHub is always in a deployable state and any tests have passed before you push.</Typography>
             <br/>
-            <Button variant="outlined" color="primary" style={{marginTop: '12px'}}>Show instructions</Button>
-            <Button variant="outlined" color="primary" style={{marginTop: '12px', marginLeft: '12px'}}>Disable deploy automation</Button>
+            <Button variant="outlined" color="primary" size="small" style={{marginTop: '12px'}}>Show instructions</Button>
+            <Button variant="outlined" color="secondary" size="small" style={{marginTop: '12px', marginLeft: '12px'}}>Disable automation</Button>
           </Grid>
         </Grid>
         <Divider />
