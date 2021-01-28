@@ -81,6 +81,12 @@ class AppNewScreen extends React.Component {
     })
   }
 
+  onChange = e => {
+    let v = e.target.value;
+    v = v.replace(/[^a-z-]/ig, '').toLowerCase()
+    this.setState({ app: v })
+  }
+
   render() {
 
     return (
@@ -99,7 +105,7 @@ class AppNewScreen extends React.Component {
                 color={this.state.app === '' && this.state.helperApp ? 'secondary' : 'default'}
                 id="outlined-helperText"
                 label="App name"
-                onChange={e => this.setState({ app: e.target.value })}
+                onChange={this.onChange}
                 onBlur={this.checkName}
                 value={this.state.app}
                 defaultValue={this.state.app}

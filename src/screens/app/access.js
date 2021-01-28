@@ -12,7 +12,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { API, USER } from '../../configs/api';
+import moment from 'moment-timezone';
+
 class Access extends React.Component {
+
+  state = {
+    user: USER
+  }
 
   render() {
     return (
@@ -23,14 +30,14 @@ class Access extends React.Component {
               <TableRow>
                 <TableCell>Collaborators</TableCell>
                 <TableCell>Role</TableCell>
-                <TableCell align="right"><Button variant="outlined" color="primary" size="small">Add collaborator</Button></TableCell>
+                <TableCell align="right"><Button title="Underconstruction" variant="outlined" color="primary" size="small">Add collaborator</Button></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell>ardiansyah3ber@gmail.com</TableCell>
+                <TableCell>{this.state.user.email}</TableCell>
                 <TableCell>owner</TableCell>
-                <TableCell align="right">-</TableCell>
+                <TableCell align="right">{moment(this.state.user.created).format('DD/MM/YYYY HH:mm')}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
